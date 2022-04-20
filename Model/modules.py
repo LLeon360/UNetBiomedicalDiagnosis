@@ -68,7 +68,6 @@ class Unet:
                   padding='same')(conv)
     return conv
 
-  @classmethod
   def BuildModel(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
 
     inputs = Input(input_size)
