@@ -23,29 +23,29 @@ class Math:
   
 class Unet:
   def EncoderMiniBlock(inputs, n_filters=32, dropout_prob=0.3, max_pooling=True):
-  conv = Conv2D(n_filters, 
-                3,     
-                activation='relu',
-                padding='same')(inputs)
-  conv = Conv2D(n_filters, 
-                3,   
-                activation='relu',
-                padding='same')(conv)
-  
-  conv = BatchNormalization()(conv, training=False)
+    conv = Conv2D(n_filters, 
+                  3,     
+                  activation='relu',
+                  padding='same')(inputs)
+    conv = Conv2D(n_filters, 
+                  3,   
+                  activation='relu',
+                  padding='same')(conv)
 
-  if dropout_prob > 0:     
-      conv = tf.keras.layers.Dropout(dropout_prob)(conv)
+    conv = BatchNormalization()(conv, training=False)
 
-  if max_pooling:
-      next_layer = tf.keras.layers.MaxPooling2D(pool_size = (2,2))(conv)    
-  else:
-      next_layer = conv
+    if dropout_prob > 0:     
+        conv = tf.keras.layers.Dropout(dropout_prob)(conv)
 
-  # skip connection (without max pooling) will be input to the decoder layer to prevent information loss during transpose convolutions      
-  skip_connection = conv
-  
-  return next_layer, skip_connection
+    if max_pooling:
+        next_layer = tf.keras.layers.MaxPooling2D(pool_size = (2,2))(conv)    
+    else:
+        next_layer = conv
+
+    # skip connection (without max pooling) will be input to the decoder layer to prevent information loss during transpose convolutions      
+    skip_connection = conv
+
+    return next_layer, skip_connection
 
 def DecoderMiniBlock(prev_layer_input, skip_layer_input, n_filters=32):
   up = Conv2DTranspose(
@@ -66,7 +66,7 @@ def DecoderMiniBlock(prev_layer_input, skip_layer_input, n_filters=32):
                 padding='same')(conv)
   return conv
 
-def build_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
+def BuildModel(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
 
   inputs = Input(input_size)
   
@@ -105,15 +105,15 @@ def build_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 
 
   return model
 
-def UNet(input_size=(128, 128, 1), 
-         n_filters=32, 
-         n_classes=2, 
-         n_layers = 4, 
-         dropout=0.3,
-         input,
-         
-        ):
+#   def UNet(input_size=(128, 128, 1), 
+#            n_filters=32, 
+#            n_classes=2, 
+#            n_layers = 4, 
+#            dropout=0.3,
+#            input,
+
+#           ):
   
 
-class ImageProcessing:
+# class ImageProcessing:
   
