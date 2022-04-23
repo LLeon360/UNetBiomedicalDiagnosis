@@ -120,3 +120,124 @@ def dice_loss(y_true, y_pred):
     dice_coef = numerator / denominator
 
     return 1 - dice_coef
+
+SCCE = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+callback_patience = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0005, patience=20)
+callbacks = [callback_patience]
+def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset, 
+                 loss = SCCE, callbacks = callbacks,
+                 batch_size=32, epochs=200, 
+                 input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3,
+                 plot_masks=True, plot_history=True, print_summary=False) :  
+  unet = build_model(input_size=input_size,n_filters=n_filters, n_classes=n_classes, n_layers = n_layers, dropout = 0.3) 
+  
+  if(print_summary):
+    unet.summary()
+    tf.keras.utils.plot_model(unet, to_file="model.png", show_shapes=True, expand_nested=True)
+
+  unet.compile(optimizer=tf.keras.optimizers.Adam(), 
+             loss=loss,
+             #loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+             #loss=dice_loss,
+              metrics=['accuracy'])
+  
+  with tf.device('/device:GPU:0'):
+    history = unet.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_valid, y_valid),
+              callbacks=callbacks)
+
+  y_train_hat_ = unet.predict(X_train.reshape((X_train.shape[0],128,128,1)))
+  y_test_hat_ = unet.predict(X_test.reshape((X_test.shape[0],128,128,1)))
+
+  if(plot_masks):
+    #plot some results
+    WIDTH, HEIGHT = 20, 20
+    ROW = 1 
+    COL = 10
+    OFFSET = 0
+
+    plt.figure(figsize=(WIDTH, HEIGHT))
+    for i in range(ROW*COL):
+        plt.subplot(ROW,COL,i+1)
+        plt.imshow(y_test[i+OFFSET][:, :, 0], cmap='gist_gray_r')
+        plt.title('true mask: ' + str(i+1))
+
+    plt.figure(figsize=(WIDTH, HEIGHT))
+    for i in range(ROW*COL):
+        plt.subplot(ROW,COL,i+1)
+        plt.imshow(y_test_hat_[i+OFFSET,:,:,1], cmap='gist_gray_r')
+        plt.title('pred mask: ' + str(i+1))
+
+    plt.figure(figsize=(WIDTH, HEIGHT))
+    for i in range(ROW*COL):
+        plt.subplot(ROW,COL,i+1)
+        plt.imshow(y_test_hat_[i+OFFSET,:,:,1] - y_test[i+OFFSET][:, :, 0], cmap='gist_gray_r')
+        plt.title('mask error: ' + str(i+1))
+
+    plt.figure(figsize=(WIDTH, HEIGHT))
+    for i in range(ROW*COL):
+        plt.subplot(ROW,COL,i+1)
+        plt.imshow(X_test[i+OFFSET][:, :, 0], cmap='gist_ncar_r')
+        plt.title('true picture: ' + str(i+1))
+
+    plt.figure(figsize=(WIDTH, HEIGHT))
+    for i in range(ROW*COL):
+        plt.subplot(ROW,COL,i+1)
+        plt.imshow(y_test_hat_[i+OFFSET,:,:,1] * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
+        plt.title('pred + true: ' + str(i+1))
+
+    plt.figure(figsize=(WIDTH, HEIGHT))
+    for i in range(ROW*COL):
+        plt.subplot(ROW,COL,i+1)
+        plt.imshow(y_test[i+OFFSET][:, :, 0] * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
+        plt.title('true mask+true: ' + str(i+1))
+
+  if(plot_history):
+    plt.figure()
+    plt.plot(history.history['accuracy'], label='accuracy')
+    plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.ylim([0, 1]) # recall accuracy is between 0 to 1
+    plt.legend(loc='lower right') # specify location of the legend
+    
+    plt.figure()
+    plt.plot(history.history['loss'], label='loss')
+    plt.plot(history.history['val_loss'], label = 'val_loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.ylim([0, 1]) # recall accuracy is between 0 to 1
+    plt.legend(loc='lower right') # specify location of the legend
+
+  if(plot_masks or plot_history):
+    plt.show()
+  
+  dice_train = dice_loss(y_true=y_train, y_pred=y_train_hat_)
+  dice_test = dice_loss(y_true=y_test, y_pred=y_test_hat_)
+
+  train_loss, train_acc = unet.evaluate(X_train, y_train, verbose=2)
+  test_loss, test_acc = unet.evaluate(X_test, y_test, verbose=2)
+
+  return {
+          'Data': {
+              'X_train': X_train, 
+              'y_train': y_train, 
+              'X_valid': X_valid, 
+              'y_valid': y_valid, 
+              'X_test': X_test, 
+              'y_test': y_test
+          },
+          'Model': unet,
+          'History': history,
+          'Train Result': {
+              'y_train_hat_': y_train_hat_,
+              'train_loss': train_loss,
+              'train_acc': train_acc,
+              'dice_loss': dice_train
+          },
+          'Test Result': {
+              'y_test_hat_': y_test_hat_,
+              'test_loss': test_loss,
+              'test_acc': test_acc,
+              'dice_loss': dice_test
+          }
+      }
