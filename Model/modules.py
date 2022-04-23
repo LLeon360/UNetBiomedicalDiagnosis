@@ -15,6 +15,8 @@ from tensorflow.keras.layers import concatenate
 from tensorflow.keras.losses import binary_crossentropy
 from sklearn.model_selection import train_test_split
 
+from keras import backend as K
+
 class Math:
   def add(a, b):
     return a + b
@@ -104,15 +106,8 @@ def BuildModel(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4
 
   return model
 
-#   def UNet(input_size=(128, 128, 1), 
-#            n_filters=32, 
-#            n_classes=2, 
-#            n_layers = 4, 
-#            dropout=0.3,
-#            input,
-
-#           ):
-  
-
-# class ImageProcessing:
-  
+def checkGPU():
+  device_name = tf.test.gpu_device_name()
+  if device_name != '/device:GPU:0':
+    raise SystemError('GPU device not found')
+  print('Found GPU at: {}'.format(device_name))
