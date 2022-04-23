@@ -111,3 +111,12 @@ def check_gpu():
   if device_name != '/device:GPU:0':
     raise SystemError('GPU device not found')
   print('Found GPU at: {}'.format(device_name))
+
+def dice_loss(y_true, y_pred):
+    y_true = tf.cast(y_true, tf.float32)
+    y_pred = tf.cast(y_pred, tf.float32)
+    numerator = 2 * tf.reduce_sum(y_true * y_pred)
+    denominator = tf.reduce_sum(y_true + y_pred)
+    dice_coef = numerator / denominator
+
+    return 1 - dice_coef
