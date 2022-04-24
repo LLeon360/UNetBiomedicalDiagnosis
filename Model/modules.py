@@ -139,7 +139,7 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset,
              loss=loss,
              #loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
              #loss=dice_loss,
-              metrics=['accuracy'])
+              metrics=N)
   
   with tf.device('/device:GPU:0'):
     history = unet.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_valid, y_valid),
