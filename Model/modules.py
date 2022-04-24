@@ -23,7 +23,7 @@ class Math:
   def subtract(a,b):
     return a - b
   
-def EncoderMiniBlock(inputs, n_filters=32, dropout_prob=0.3, max_pooling=True):
+def EncoderBlock(inputs, n_filters=32, dropout_prob=0.3, max_pooling=True):
   conv = Conv2D(n_filters, 
                 3,     
                 activation='relu',
@@ -48,7 +48,7 @@ def EncoderMiniBlock(inputs, n_filters=32, dropout_prob=0.3, max_pooling=True):
 
   return next_layer, skip_connection
 
-def DecoderMiniBlock(prev_layer_input, skip_layer_input, n_filters=32):
+def DecoderBlock(prev_layer_input, skip_layer_input, n_filters=32):
   up = Conv2DTranspose(
                 n_filters,
                 (3,3),   
@@ -75,20 +75,20 @@ def build_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 
   #n_layers is encoder layers
   # Encoder includes multiple convolutional mini blocks with different maxpooling, dropout and filter parameters
   # Observe that the filters are increasing as we go deeper into the network which will increasse the # channels of the image 
-  eblocks.append(EncoderMiniBlock(inputs, n_filters,dropout_prob=0, max_pooling=True))
+  eblocks.append(EncoderBlock(inputs, n_filters,dropout_prob=0, max_pooling=True))
   for i in range(n_layers-1):
     dropout = 0
     if(i > 1):
       dropout = 0.3
-    eblocks.append(EncoderMiniBlock(eblocks[-1][0], n_filters*(2**(i+1)), dropout_prob=dropout, max_pooling=True))
+    eblocks.append(EncoderBlock(eblocks[-1][0], n_filters*(2**(i+1)), dropout_prob=dropout, max_pooling=True))
 
   #intermediate latent also put in encoder
-  eblocks.append(EncoderMiniBlock(eblocks[-1][0], n_filters*(2**(n_layers)), dropout_prob=0, max_pooling=False)) 
+  eblocks.append(EncoderBlock(eblocks[-1][0], n_filters*(2**(n_layers)), dropout_prob=0, max_pooling=False)) 
 
   dblocks = []
-  dblocks.append(DecoderMiniBlock(eblocks[-1][0], eblocks[-2][1],  n_filters*(2**(n_layers-1))))
+  dblocks.append(DecoderBlock(eblocks[-1][0], eblocks[-2][1],  n_filters*(2**(n_layers-1))))
   for i in range(n_layers-1): 
-    dblocks.append(DecoderMiniBlock(dblocks[-1], eblocks[-i-3][1],  n_filters*(2**(n_layers-2-i))))
+    dblocks.append(DecoderBlock(dblocks[-1], eblocks[-i-3][1],  n_filters*(2**(n_layers-2-i))))
 
   # Complete the model with 1 3x3 convolution layer (Same as the prev Conv Layers)
   # Followed by a 1x1 Conv layer to get the image to the desired size. 
