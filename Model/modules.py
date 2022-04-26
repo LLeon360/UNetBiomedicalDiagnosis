@@ -122,8 +122,17 @@ def dice_loss(y_true, y_pred):
     return 1 - dice_coef
 
 SCCE = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
-callback_patience = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0005, patience=20)
-callbacks = [callback_patience]
+# callback_patience = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0005, patience=20)
+# callbacks = [callback_patience]
+
+checkpoint_filepath = '/tmp/checkpoint'
+model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+                                                              save_weights_only=True,
+                                                              monitor='loss',
+                                                              mode='min',
+                                                              save_best_only=True)
+callbacks = [model_checkpoint_callback]
+
 def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset, 
                  loss = SCCE, callbacks = callbacks,
                  batch_size=32, epochs=200, 
@@ -141,10 +150,12 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset,
              #loss=dice_loss,
               metrics=N)
   
+  
   with tf.device('/device:GPU:0'):
     history = unet.fit(X_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(X_valid, y_valid),
               callbacks=callbacks)
-
+  unet.load_weights(checkpoint_filepath)
+  
   y_train_hat_ = unet.predict(X_train.reshape((X_train.shape[0],128,128,1)))
   y_test_hat_ = unet.predict(X_test.reshape((X_test.shape[0],128,128,1)))
 
