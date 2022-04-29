@@ -150,7 +150,7 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
     checkpoint_filepath = f'UNet_{dataset}_{n_layers}L_{n_filters}'
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
                                                                 save_weights_only=True,
-                                                                monitor='loss',
+                                                                monitor='val_loss',
                                                                 mode='min',
                                                                 save_best_only=True)
     actual_callbacks = [model_checkpoint_callback]
