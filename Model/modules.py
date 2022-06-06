@@ -16,12 +16,6 @@ from tensorflow.keras.losses import binary_crossentropy
 from sklearn.model_selection import train_test_split
 
 from keras import backend as K
-
-class Math:
-  def add(a, b):
-    return a + b
-  def subtract(a,b):
-    return a - b
   
 def EncoderBlock(inputs, n_filters=32, dropout_prob=0.3, max_pooling=True):
   conv = Conv2D(n_filters, 
