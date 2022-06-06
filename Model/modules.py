@@ -144,13 +144,13 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
     checkpoint_filepath = f'UNet_{dataset}_{n_layers}L_{n_filters}'
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
                                                                 save_weights_only=True,
-                                                                monitor='val_loss',
+                                                                monitor='loss',
                                                                 mode='min',
                                                                 save_best_only=True)
     actual_callbacks = [model_checkpoint_callback]
   
   if(callback_type == "patience"):
-    callback_patience = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0005, patience=20)
+    callback_patience = tf.keras.callbacks.EarlyStopping(monitor='loss', min_delta=0.0001, patience=30)
     actual_callbacks = [callback_patience]
   
   with tf.device('/device:GPU:0'):
@@ -160,8 +160,52 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
   if(callback_type == "checkpoint"):
     unet.load_weights(checkpoint_filepath)
 
+  eval_results = EvaluateUNet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
+                 plot_masks = plot_masks, print_summary = print_summary)
+
+  if(plot_history):
+      plt.figure()
+      plt.plot(history.history['accuracy'], label='accuracy')
+      plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+      plt.xlabel('Epoch')
+      plt.ylabel('Accuracy')
+      plt.ylim([0, 1]) # recall accuracy is between 0 to 1
+      plt.legend(loc='lower right') # specify location of the legend
+      
+      plt.figure()
+      plt.plot(history.history['loss'], label='loss')
+      plt.plot(history.history['val_loss'], label = 'val_loss')
+      plt.xlabel('Epoch')
+      plt.ylabel('Loss')
+      plt.ylim([0, 1]) # recall accuracy is between 0 to 1
+      plt.legend(loc='lower right') # specify location of the legend
+
+      plt.show()
+
+  results = {
+          'Data': {
+              'X_train': X_train, 
+              'y_train': y_train, 
+              'X_valid': X_valid, 
+              'y_valid': y_valid, 
+              'X_test': X_test, 
+              'y_test': y_test
+          },
+          'Model': unet,
+          'History': history
+      }
+
+  results.update(eval_results)
+
+  return results
+
+def EvaluateUNet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
+                 plot_masks = True, print_summary = False):  
+
   y_train_hat_ = unet.predict(X_train.reshape((X_train.shape[0],128,128,1)))
   y_test_hat_ = unet.predict(X_test.reshape((X_test.shape[0],128,128,1)))
+  y_train_hat_ = tf.argmax(y_train_hat_, 3)
+  y_test_hat_ = tf.argmax(y_test_hat_, 3)
 
   if(plot_masks):
     #plot some results
@@ -179,13 +223,13 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
     plt.figure(figsize=(WIDTH, HEIGHT))
     for i in range(ROW*COL):
         plt.subplot(ROW,COL,i+1)
-        plt.imshow(y_test_hat_[i+OFFSET,:,:,1], cmap='gist_gray_r')
+        plt.imshow(y_test_hat_[i+OFFSET], cmap='gist_gray_r')
         plt.title('pred mask: ' + str(i+1))
 
     plt.figure(figsize=(WIDTH, HEIGHT))
     for i in range(ROW*COL):
         plt.subplot(ROW,COL,i+1)
-        plt.imshow(y_test_hat_[i+OFFSET,:,:,1] - y_test[i+OFFSET][:, :, 0], cmap='gist_gray_r')
+        plt.imshow(y_test_hat_[i+OFFSET].numpy() - y_test[i+OFFSET][:, :, 0], cmap='gist_gray_r')
         plt.title('mask error: ' + str(i+1))
 
     plt.figure(figsize=(WIDTH, HEIGHT))
@@ -197,7 +241,7 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
     plt.figure(figsize=(WIDTH, HEIGHT))
     for i in range(ROW*COL):
         plt.subplot(ROW,COL,i+1)
-        plt.imshow(y_test_hat_[i+OFFSET,:,:,1] * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
+        plt.imshow(y_test_hat_[i+OFFSET].numpy() * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
         plt.title('pred + true: ' + str(i+1))
 
     plt.figure(figsize=(WIDTH, HEIGHT))
@@ -206,24 +250,6 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
         plt.imshow(y_test[i+OFFSET][:, :, 0] * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
         plt.title('true mask+true: ' + str(i+1))
 
-  if(plot_history):
-    plt.figure()
-    plt.plot(history.history['accuracy'], label='accuracy')
-    plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.ylim([0, 1]) # recall accuracy is between 0 to 1
-    plt.legend(loc='lower right') # specify location of the legend
-    
-    plt.figure()
-    plt.plot(history.history['loss'], label='loss')
-    plt.plot(history.history['val_loss'], label = 'val_loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.ylim([0, 1]) # recall accuracy is between 0 to 1
-    plt.legend(loc='lower right') # specify location of the legend
-
-  if(plot_masks or plot_history):
     plt.show()
   
   dice_train = dice_loss(y_true=y_train, y_pred=y_train_hat_)
@@ -231,8 +257,10 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
 
   print("train:")
   train_loss, train_acc = unet.evaluate(X_train, y_train, verbose=2)
+  print(f'Dice: {dice_train}')
   print("test:")
   test_loss, test_acc = unet.evaluate(X_test, y_test, verbose=2)
+  print(f'Dice: {dice_test}')
 
   return {
           'Data': {
@@ -244,7 +272,6 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
               'y_test': y_test
           },
           'Model': unet,
-          'History': history,
           'Train Result': {
               'y_train_hat_': y_train_hat_,
               'train_loss': train_loss,
