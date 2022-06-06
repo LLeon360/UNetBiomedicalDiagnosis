@@ -109,8 +109,7 @@ def check_gpu():
 def dice_loss(y_true, y_pred):
   
     y_true = y_true[:, :, :, 0]
-    y_pred = y_pred[:,:,:,1]
-    
+
     y_true = tf.cast(y_true, tf.float32)
     y_pred = tf.cast(y_pred, tf.float32)
     numerator = 2 * tf.reduce_sum(y_true * y_pred)
