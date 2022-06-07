@@ -61,8 +61,7 @@ def DecoderBlock(prev_layer_input, skip_layer_input, n_filters=32):
                 padding='same')(conv)
   return conv
 
-def build_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
-
+def build_unet_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
   inputs = Input(input_size)
 
   eblocks = []
@@ -120,13 +119,13 @@ def dice_loss(y_true, y_pred):
 
 SCCE = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
-def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
+def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
                  loss = SCCE, callback_type = "", callbacks = [],
                  batch_size=32, epochs=200, 
                  input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3,
                  plot_masks=True, plot_history=True, print_summary=False) :  
   print( f'Epochs = {epochs} \nloss = {loss} \ncallback type = {callback_type} \nUNet_{dataset}_{n_layers}L_{n_filters}')
-  unet = build_model(input_size=input_size,n_filters=n_filters, n_classes=n_classes, n_layers = n_layers, dropout = 0.3) 
+  unet = build_unet_model(input_size=input_size,n_filters=n_filters, n_classes=n_classes, n_layers = n_layers, dropout = 0.3) 
   
   if(print_summary):
     unet.summary()
@@ -159,7 +158,7 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
   if(callback_type == "checkpoint"):
     unet.load_weights(checkpoint_filepath)
 
-  eval_results = EvaluateUNet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
+  eval_results = evaluate_unet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
                  plot_masks = plot_masks, print_summary = print_summary)
 
   if(plot_history):
@@ -198,7 +197,7 @@ def UNetFunction(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "
 
   return results
 
-def EvaluateUNet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
+def evaluate_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
                  plot_masks = True, print_summary = False):  
 
   y_train_hat_ = unet.predict(X_train.reshape((X_train.shape[0],128,128,1)))
