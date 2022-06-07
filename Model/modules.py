@@ -61,7 +61,7 @@ def DecoderBlock(prev_layer_input, skip_layer_input, n_filters=32):
                 padding='same')(conv)
   return conv
 
-def build_unet_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
+def build_model(input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3):
   inputs = Input(input_size)
 
   eblocks = []
@@ -125,7 +125,7 @@ def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = 
                  input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3,
                  plot_masks=True, plot_history=True, print_summary=False) :  
   print( f'Epochs = {epochs} \nloss = {loss} \ncallback type = {callback_type} \nUNet_{dataset}_{n_layers}L_{n_filters}')
-  unet = build_unet_model(input_size=input_size,n_filters=n_filters, n_classes=n_classes, n_layers = n_layers, dropout = 0.3) 
+  unet = build_model(input_size=input_size,n_filters=n_filters, n_classes=n_classes, n_layers = n_layers, dropout = 0.3) 
   
   if(print_summary):
     unet.summary()
