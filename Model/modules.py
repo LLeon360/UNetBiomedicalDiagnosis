@@ -107,6 +107,7 @@ def check_gpu():
 
 def dice_loss(y_true, y_pred):
   
+    y_pred = tf.argmax(y_pred, 3)
     y_true = y_true[:, :, :, 0]
 
     y_true = tf.cast(y_true, tf.float32)
@@ -202,8 +203,8 @@ def evaluate_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, data
 
   y_train_hat_ = unet.predict(X_train.reshape((X_train.shape[0],128,128,1)))
   y_test_hat_ = unet.predict(X_test.reshape((X_test.shape[0],128,128,1)))
-  y_train_hat_ = tf.argmax(y_train_hat_, 3)
-  y_test_hat_ = tf.argmax(y_test_hat_, 3)
+  y_train_hat_max = tf.argmax(y_train_hat_, 3)
+  y_test_hat_max = tf.argmax(y_test_hat_, 3)
 
   if(plot_masks):
     #plot some results
@@ -221,13 +222,13 @@ def evaluate_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, data
     plt.figure(figsize=(WIDTH, HEIGHT))
     for i in range(ROW*COL):
         plt.subplot(ROW,COL,i+1)
-        plt.imshow(y_test_hat_[i+OFFSET], cmap='gist_gray_r')
+        plt.imshow(y_test_hat_max[i+OFFSET], cmap='gist_gray_r')
         plt.title('pred mask: ' + str(i+1))
 
     plt.figure(figsize=(WIDTH, HEIGHT))
     for i in range(ROW*COL):
         plt.subplot(ROW,COL,i+1)
-        plt.imshow(y_test_hat_[i+OFFSET].numpy() - y_test[i+OFFSET][:, :, 0], cmap='gist_gray_r')
+        plt.imshow(y_test_hat_max[i+OFFSET].numpy() - y_test[i+OFFSET][:, :, 0], cmap='gist_gray_r')
         plt.title('mask error: ' + str(i+1))
 
     plt.figure(figsize=(WIDTH, HEIGHT))
@@ -239,7 +240,7 @@ def evaluate_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, data
     plt.figure(figsize=(WIDTH, HEIGHT))
     for i in range(ROW*COL):
         plt.subplot(ROW,COL,i+1)
-        plt.imshow(y_test_hat_[i+OFFSET].numpy() * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
+        plt.imshow(y_test_hat_max[i+OFFSET].numpy() * X_test[i+OFFSET][:,:,0], cmap='gist_ncar_r')
         plt.title('pred + true: ' + str(i+1))
 
     plt.figure(figsize=(WIDTH, HEIGHT))
