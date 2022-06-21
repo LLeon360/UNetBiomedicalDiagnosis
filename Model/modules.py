@@ -121,7 +121,7 @@ def dice_loss(y_true, y_pred):
 SCCE = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
 
 def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
-                 loss = SCCE, callback_type = "", callbacks = [],
+                 loss = SCCE, optimizer=tf.keras.optimizers.Adam(),callback_type = "", callbacks = [],
                  batch_size=32, epochs=200, 
                  input_size=(128, 128, 1), n_filters=32, n_classes=2, n_layers = 4, dropout=0.3,
                  plot_masks=True, plot_history=True, print_summary=False) :  
@@ -132,7 +132,7 @@ def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = 
     unet.summary()
     tf.keras.utils.plot_model(unet, to_file="model.png", show_shapes=True, expand_nested=True)
 
-  unet.compile(optimizer=tf.keras.optimizers.Adam(), 
+  unet.compile(optimizer=optimizer, 
              loss=loss,
              #loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
              #loss=dice_loss,
