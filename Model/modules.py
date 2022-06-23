@@ -153,7 +153,7 @@ def train_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test,
                  plot_masks=True, plot_history=True, print_summary=False):
   actual_callbacks = callbacks
   if(callback_type == "checkpoint"):
-    checkpoint_filepath = f'UNet_{dataset}_{n_layers}L_{n_filters}'
+    checkpoint_filepath = f'/content/UNet_{dataset}_{n_layers}L_{n_filters}'
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
                                                                 save_weights_only=True,
                                                                 monitor='loss',
