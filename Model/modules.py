@@ -139,25 +139,10 @@ def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = 
               metrics=['accuracy'])
   
   #train and evaluate
-  eval_results = train_unet(unet, X_train=X_train, y_train=y_train, X_valid=X_valid, y_valid=y_valid, X_test=X_test, y_test=y_test, dataset=dataset,
+  results = train_unet(unet, X_train=X_train, y_train=y_train, X_valid=X_valid, y_valid=y_valid, X_test=X_test, y_test=y_test, dataset=dataset,
                             loss = loss, optimizer=optimizer, callback_type = callback_type, callbacks = callbacks,
                             n_layers=n_layers, n_filters=n_filters,
                             batch_size=batch_size, epochs=epochs)
-  
-  results = {
-          'Data': {
-              'X_train': X_train, 
-              'y_train': y_train, 
-              'X_valid': X_valid, 
-              'y_valid': y_valid, 
-              'X_test': X_test, 
-              'y_test': y_test
-          },
-          'Model': unet,
-          'History': history
-      }
-
-  results.update(eval_results)
 
   return results
 
@@ -208,8 +193,23 @@ def train_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test,
    
   eval_results = evaluate_unet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
                  plot_masks = plot_masks, print_summary = print_summary)
-   
-  return eval_results
+  
+  results = {
+          'Data': {
+              'X_train': X_train, 
+              'y_train': y_train, 
+              'X_valid': X_valid, 
+              'y_valid': y_valid, 
+              'X_test': X_test, 
+              'y_test': y_test
+          },
+          'Model': unet,
+          'History': history
+      }
+
+  results.update(eval_results)
+    
+  return results
 
 def evaluate_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
                  plot_masks = True, print_summary = False):  
