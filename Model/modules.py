@@ -138,33 +138,11 @@ def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = 
              #loss=dice_loss,
               metrics=['accuracy'])
   
-  train_unet(unet, X_train=X_train, y_train=y_train, X_valid=X_valid, y_valid=y_valid, X_test=X_test, y_test=y_test, dataset=dataset,
+  #train and evaluate
+  eval_results = train_unet(unet, X_train=X_train, y_train=y_train, X_valid=X_valid, y_valid=y_valid, X_test=X_test, y_test=y_test, dataset=dataset,
              loss = loss, optimizer=optimizer, callback_type = callback_type, callbacks = callbacks,
-                 batch_size=batch_size, epochs=epochs,
-                 plot_masks=plot_masks, plot_history=plot_history, print_summary=print_summary)
-
-  eval_results = evaluate_unet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
-                 plot_masks = plot_masks, print_summary = print_summary)
-
-  if(plot_history):
-      plt.figure()
-      plt.plot(history.history['accuracy'], label='accuracy')
-      plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
-      plt.xlabel('Epoch')
-      plt.ylabel('Accuracy')
-      plt.ylim([0, 1]) # recall accuracy is between 0 to 1
-      plt.legend(loc='lower right') # specify location of the legend
-      
-      plt.figure()
-      plt.plot(history.history['loss'], label='loss')
-      plt.plot(history.history['val_loss'], label = 'val_loss')
-      plt.xlabel('Epoch')
-      plt.ylabel('Loss')
-      plt.ylim([0, 1]) # recall accuracy is between 0 to 1
-      plt.legend(loc='lower right') # specify location of the legend
-
-      plt.show()
-
+                 batch_size=batch_size, epochs=epochs)
+  
   results = {
           'Data': {
               'X_train': X_train, 
@@ -207,9 +185,7 @@ def train_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset
   if(callback_type == "checkpoint"):
     unet.load_weights(checkpoint_filepath)
 
-  eval_results = evaluate_unet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
-                 plot_masks = plot_masks, print_summary = print_summary)
-
+  
   if(plot_history):
       plt.figure()
       plt.plot(history.history['accuracy'], label='accuracy')
@@ -228,6 +204,11 @@ def train_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset
       plt.legend(loc='lower right') # specify location of the legend
 
       plt.show()
+   
+  eval_results = evaluate_unet(unet = unet, X_train = X_train, y_train = y_train, X_valid = X_valid, y_valid = y_valid, X_test = X_test, y_test = y_test, dataset = dataset,
+                 plot_masks = plot_masks, print_summary = print_summary)
+   
+  return eval_results
 
 def evaluate_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = "unspecified", 
                  plot_masks = True, print_summary = False):  
