@@ -185,7 +185,6 @@ def train_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, dataset
   if(callback_type == "checkpoint"):
     unet.load_weights(checkpoint_filepath)
 
-  
   if(plot_history):
       plt.figure()
       plt.plot(history.history['accuracy'], label='accuracy')
