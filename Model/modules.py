@@ -148,7 +148,7 @@ def unet_function(X_train, y_train, X_valid, y_valid, X_test, y_test, dataset = 
 
 def train_unet(unet, X_train, y_train, X_valid, y_valid, X_test, y_test, 
                  n_layers, n_filters, dataset = "unspecified", 
-                 loss = SCCE, optimizer=tf.keras.optimizers.Adam(), callback_type = "", callbacks = [],
+                 loss = SCCE, callback_type = "", callbacks = [],
                  batch_size=32, epochs=200,
                  plot_masks=True, plot_history=True, print_summary=False):
   actual_callbacks = callbacks
