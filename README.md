@@ -9,4 +9,6 @@ Unet Result + CNN + GradCAM Heatmap: https://colab.research.google.com/drive/1hG
 
 <img width="579" alt="Example Mask Table" src="https://user-images.githubusercontent.com/103869590/175452211-fb04d0da-ab88-4514-ab3d-73cc782aa09e.PNG">
 <img width="588" alt="Example Crop Table" src="https://user-images.githubusercontent.com/103869590/175452210-31e44b71-034f-4e31-8d4a-bc88b578a426.PNG">
-![GradCAM Heatmap Final Cropped Visualization of DenseNet201 for all classes](https://user-images.githubusercontent.com/103869590/179291760-3ba56059-e7e3-404b-bb31-65526075b735.png)
+
+GradCAM Heatmap Final Cropped Visualization of DenseNet201 for all classes
+![DenseNet201_Last_Img150](https://user-images.githubusercontent.com/103869590/179291908-def12ab5-6b3e-498d-9436-d2a57828effc.png)
