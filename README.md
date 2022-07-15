@@ -9,4 +9,4 @@ Unet Result + CNN + GradCAM Heatmap: https://colab.research.google.com/drive/1hG
 
 <img width="579" alt="Example Mask Table" src="https://user-images.githubusercontent.com/103869590/175452211-fb04d0da-ab88-4514-ab3d-73cc782aa09e.PNG">
 <img width="588" alt="Example Crop Table" src="https://user-images.githubusercontent.com/103869590/175452210-31e44b71-034f-4e31-8d4a-bc88b578a426.PNG">
-<img width="602" alt="DenseNet201 Final Visualization Pneumonia" src="https://user-images.githubusercontent.com/103869590/179291681-81d8481b-6f8d-486d-975e-7263c29a0006.PNG">
+![GradCAM Heatmap Final Cropped Visualization of DenseNet201 for all classes](https://user-images.githubusercontent.com/103869590/179291760-3ba56059-e7e3-404b-bb31-65526075b735.png)
