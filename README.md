@@ -23,9 +23,8 @@ Unet Training: https://colab.research.google.com/drive/1q8k_JOL2-EkIIpuX2x3EcqEA
 
 Unet Result + CNN + GradCAM Heatmap: https://colab.research.google.com/drive/1hGpYr7w37-9qHvYaFKWLQKPytmldCT0S#scrollTo=uWeiAf8ybw-j
 
-
-<img width="579" alt="Example Mask Table" src="https://user-images.githubusercontent.com/103869590/175452211-fb04d0da-ab88-4514-ab3d-73cc782aa09e.PNG">
-<img width="588" alt="Example Crop Table" src="https://user-images.githubusercontent.com/103869590/175452210-31e44b71-034f-4e31-8d4a-bc88b578a426.PNG">
+U-Net 5 Encoding 16 Filters (UNet(5E16F)):
+<img width="430" alt="UNet(5E16F) Results" src="https://user-images.githubusercontent.com/103869590/202833418-8b14db95-2513-47ed-a7a0-4cd2bd049e7f.PNG">
 
 GradCAM Heatmap Final Cropped Visualization of DenseNet201 for all classes
 ![DenseNet201_Last_Img150](https://user-images.githubusercontent.com/103869590/179291908-def12ab5-6b3e-498d-9436-d2a57828effc.png)
