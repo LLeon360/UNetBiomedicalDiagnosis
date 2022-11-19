@@ -1,8 +1,8 @@
 # My Research Paper 
 
-## Presented at AAAI (Association for the Advancement of AI) Fall Series Symposium 2022, KGML (Knowledge-Guided Machine Learning) Symposium, Contributed Paper Presentation Session 5 Paper 3:
+## Presented at AAAI (Association for the Advancement of AI) Fall Series Symposium 2022:
 
-### Symposium Agenda Here: (Scroll to Session 5 Paper 3, Presentation at 2:36)
+### AAAI KGML Symposium Agenda Here: (Scroll to Session 5 Paper 3, Presentation at 2:36)
 https://sites.google.com/vt.edu/kgml-aaai-22 
 
 
