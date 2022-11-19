@@ -7,7 +7,6 @@ https://sites.google.com/vt.edu/kgml-aaai-22
 
 ## Peer-Reviewed by Program Committee Paper Link: 
 https://drive.google.com/open?id=1aLdN9p4008pGKvzhkdzUcY4FD-sjQFWV
-GitHub Repo: https://github.com/LLeon360/UNetBiomedicalDiagnosis
 
 ## Abstract
 As of today, there are many very capable state of the art AI image classifications techniques, namely in convolutional neural nets like VGG, ResNet, DenseNet, Xception, etc. However in the field of digital pathology, high accuracy classification is not enough, these black box models produce only a final confidence for classification but no insight into its decision making. It is here that visualization techniques and computer vision can be applied to augment these models for increased interpretability to build more transparent and trustworthy systems. 
