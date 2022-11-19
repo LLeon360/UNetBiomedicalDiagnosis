@@ -6,7 +6,7 @@
 https://sites.google.com/vt.edu/kgml-aaai-22 
 
 
-## Peer-Reviewed by Program Committee Paper Link: 
+## Paper Link: 
 https://drive.google.com/open?id=1aLdN9p4008pGKvzhkdzUcY4FD-sjQFWV
 (arXiv coming soon, to be published in conference proceedings)
 
