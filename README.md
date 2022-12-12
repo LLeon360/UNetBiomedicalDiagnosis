@@ -2,9 +2,13 @@
 
 ## Presented at AAAI (Association for the Advancement of AI) Fall Series Symposium 2022:
 
+## Presentation:
+https://youtu.be/rDLEVZzvHiE
+## Q&A:
+https://youtu.be/6ghWg1ZPla4
+
 ### AAAI KGML Symposium Agenda Here: (Scroll to Session 5 Paper 3, Presentation at 2:36)
 https://sites.google.com/vt.edu/kgml-aaai-22 
-
 
 ## Paper Link: 
 https://drive.google.com/open?id=1aLdN9p4008pGKvzhkdzUcY4FD-sjQFWV
