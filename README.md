@@ -9,6 +9,11 @@ https://youtu.be/5adO69BNP0M
 https://sites.google.com/vt.edu/kgml-aaai-22 
 
 ## Paper Link: 
+Jaiden Xuan Schraut, Leon Liu, Jonathan Gong & Yiqiao Yin (2022), "A multi-output network with U-net enhanced class activation map and robust classification performance for medical imaging analysis"
+https://link.springer.com/article/10.1007/s44163-022-00045-1
+
+Paper Presented at AAAI:
+Leon Liu, Yiqiao Yin (2022), "Towards Explainable AI on Chest X-ray Diagnosis using Image Segmentation and CAM Visualization"
 https://drive.google.com/open?id=1aLdN9p4008pGKvzhkdzUcY4FD-sjQFWV
 (arXiv coming soon, to be published in conference proceedings)
 
