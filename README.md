@@ -15,7 +15,6 @@ https://link.springer.com/article/10.1007/s44163-022-00045-1
 Paper Presented at AAAI:
 Leon Liu, Yiqiao Yin (2022), "Towards Explainable AI on Chest X-ray Diagnosis using Image Segmentation and CAM Visualization"
 https://drive.google.com/open?id=1aLdN9p4008pGKvzhkdzUcY4FD-sjQFWV
-(arXiv coming soon, to be published in conference proceedings)
 
 ## Abstract
 As of today, there are many very capable state of the art AI image classifications techniques, namely in convolutional neural nets like VGG, ResNet, DenseNet, Xception, etc. However in the field of digital pathology, high accuracy classification is not enough, these black box models produce only a final confidence for classification but no insight into its decision making. It is here that visualization techniques and computer vision can be applied to augment these models for increased interpretability to build more transparent and trustworthy systems. 
