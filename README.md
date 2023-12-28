@@ -1,4 +1,4 @@
-# My Research Paper 
+# Research Paper 
 
 ## Presented at AAAI (Association for the Advancement of AI) Fall Series Symposium 2022:
 
