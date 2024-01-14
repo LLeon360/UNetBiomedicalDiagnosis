@@ -1,3 +1,9 @@
+#### U-Net 5 Encoding 16 Filters (UNet(5E16F)):
+<img width="430" alt="UNet(5E16F) Results" src="https://user-images.githubusercontent.com/103869590/202833418-8b14db95-2513-47ed-a7a0-4cd2bd049e7f.PNG">
+
+#### GradCAM Heatmap Final Cropped Visualization of DenseNet201 for all classes
+![DenseNet201_Last_Img150](https://user-images.githubusercontent.com/103869590/179291908-def12ab5-6b3e-498d-9436-d2a57828effc.png)
+
 # Research Paper 
 
 ## Presented at AAAI (Association for the Advancement of AI) Fall Series Symposium 2022:
@@ -30,9 +36,3 @@ https://colab.research.google.com/drive/1q8k_JOL2-EkIIpuX2x3EcqEAtwWfuBoB#scroll
 
 ### Unet Result + CNN + GradCAM Heatmap: 
 https://colab.research.google.com/drive/1hGpYr7w37-9qHvYaFKWLQKPytmldCT0S#scrollTo=uWeiAf8ybw-j
-
-#### U-Net 5 Encoding 16 Filters (UNet(5E16F)):
-<img width="430" alt="UNet(5E16F) Results" src="https://user-images.githubusercontent.com/103869590/202833418-8b14db95-2513-47ed-a7a0-4cd2bd049e7f.PNG">
-
-#### GradCAM Heatmap Final Cropped Visualization of DenseNet201 for all classes
-![DenseNet201_Last_Img150](https://user-images.githubusercontent.com/103869590/179291908-def12ab5-6b3e-498d-9436-d2a57828effc.png)
