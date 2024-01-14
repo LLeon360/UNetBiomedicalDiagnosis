@@ -1,6 +1,7 @@
+# Sample Results
 <details>
 
-<summary>Sample Results</summary>
+<summary><b>Expand to view images</b></summary>
 
 #### U-Net Ex:
 <img width="800" alt="UNet(5E16F) Results" src="https://user-images.githubusercontent.com/103869590/202833418-8b14db95-2513-47ed-a7a0-4cd2bd049e7f.PNG">
